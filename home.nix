@@ -12,7 +12,7 @@
     bottom
     coreutils
     curl
-    du-dust
+    dust
     fd
     findutils
     fx
@@ -34,12 +34,6 @@
   ];
 
   stable-packages = with pkgs; [
-    # FIXME: customize these stable packages to your liking for the languages that you use
-
-    # FIXME: you can add plugins, change keymaps etc using (jeezyvim.nixvimExtend {})
-    # https://github.com/LGUG2Z/JeezyVim#extending
-    jeezyvim
-
     # key tools
     gh # for bootstrapping
     just
@@ -73,7 +67,7 @@
   ];
 in {
   imports = [
-    nix-index-database.hmModules.nix-index
+    nix-index-database.homeModules.nix-index
   ];
 
   home.stateVersion = "22.11";
@@ -103,7 +97,6 @@ in {
     nix-index.enableFishIntegration = true;
     nix-index-database.comma.enable = true;
 
-    # FIXME: disable this if you don't want to use the starship prompt
     starship.enable = true;
     starship.settings = {
       aws.disabled = true;
@@ -119,11 +112,9 @@ in {
       hostname.style = "bold green";
     };
 
-    # FIXME: disable whatever you don't want
     fzf.enable = true;
     fzf.enableFishIntegration = true;
     lsd.enable = true;
-    lsd.enableAliases = true;
     zoxide.enable = true;
     zoxide.enableFishIntegration = true;
     zoxide.options = ["--cmd cd"];
@@ -141,8 +132,8 @@ in {
         side-by-side = true;
         navigate = true;
       };
-      userEmail = ""; # FIXME: set your git email
-      userName = ""; #FIXME: set your git username
+      userEmail = "liu.liaoliao@outlook.com";
+      userName = "Liao-Liao Liu";
       extraConfig = {
         # FIXME: uncomment the next lines if you want to be able to clone private https repos
         # url = {
@@ -183,6 +174,7 @@ in {
           + "/extras/kanagawa.fish")}
 
         set -U fish_greeting
+        fish_add_path --append /mnt/c/Users/liuli/scoop/apps/win32yank/0.1.1
       '';
       functions = {
         refresh = "source $HOME/.config/fish/config.fish";
@@ -229,10 +221,6 @@ in {
         pbcopy = "/mnt/c/Windows/System32/clip.exe";
         pbpaste = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -command 'Get-Clipboard'";
         explorer = "/mnt/c/Windows/explorer.exe";
-        
-        # To use code as the command, uncomment the line below. Be sure to replace [my-user] with your username. 
-        # If your code binary is located elsewhere, adjust the path as needed.
-        # code = "/mnt/c/Users/[my-user]/AppData/Local/Programs/'Microsoft VS Code'/bin/code";
       };
       plugins = [
         {

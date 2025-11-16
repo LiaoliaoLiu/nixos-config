@@ -1,10 +1,13 @@
 {
   description = "NixOS configuration";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/master";
   inputs.nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
-  inputs.home-manager.url = "github:nix-community/home-manager/release-24.11";
+  inputs.nix-ld.url = "github:Mic92/nix-ld";
+  inputs.nix-ld.inputs.nixpkgs.follows = "nixpkgs";
+
+  inputs.home-manager.url = "github:nix-community/home-manager/master";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.nur.url = "github:nix-community/NUR";
@@ -15,7 +18,7 @@
   inputs.nix-index-database.url = "github:Mic92/nix-index-database";
   inputs.nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.jeezyvim.url = "github:LGUG2Z/JeezyVim";
+  inputs.neovim.url = "/home/t-elos/repo/neovim";
 
   outputs = inputs:
     with inputs; let
@@ -33,7 +36,6 @@
 
         overlays = [
           nur.overlays.default
-          jeezyvim.overlays.default
 
           (_final: prev: {
             unstable = import nixpkgs-unstable {
@@ -74,6 +76,13 @@
             [
               (configurationDefaults specialArgs)
               home-manager.nixosModules.home-manager
+              nix-ld.nixosModules.nix-ld
+              { programs.nix-ld.dev.enable = true; }
+              {
+                environment.systemPackages = [
+                  neovim.packages.${system}.nvim
+                ];
+              }
             ]
             ++ modules;
         };
@@ -82,7 +91,7 @@
 
       nixosConfigurations.nixos = mkNixosConfiguration {
         hostname = "nixos";
-        username = "nixos"; # FIXME: replace with your own username!
+        username = "t-elos";
         modules = [
           nixos-wsl.nixosModules.wsl
           ./wsl.nix
