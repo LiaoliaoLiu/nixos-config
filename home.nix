@@ -122,19 +122,22 @@ in {
     broot.enableFishIntegration = true;
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
-
-    git = {
+    delta = {
       enable = true;
-      package = pkgs.unstable.git;
-      delta.enable = true;
-      delta.options = {
+      enableGitIntegration = true;
+      options = {
         line-numbers = true;
         side-by-side = true;
         navigate = true;
       };
-      userEmail = "liu.liaoliao@outlook.com";
-      userName = "Liao-Liao Liu";
-      extraConfig = {
+    };
+
+    git = {
+      enable = true;
+      package = pkgs.unstable.git;
+      settings = {
+        user.email = "liu.liaoliao@outlook.com";
+        user.name = "Liao-Liao Liu";
         # FIXME: uncomment the next lines if you want to be able to clone private https repos
         # url = {
         #   "https://oauth2:${secrets.github_token}@github.com" = {
