@@ -18,84 +18,34 @@
   inputs.nix-index-database.url = "github:Mic92/nix-index-database";
   inputs.nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.neovim.url = "/home/t-elos/repo/neovim";
+  # inputs.neovim.url = "/home/t-elos/repo/neovim";
 
-  outputs = inputs:
-    with inputs; let
-      secrets = builtins.fromJSON (builtins.readFile "${self}/secrets.json");
+  outputs = inputs: let
+    system = "x86_64-linux";
+    hostname = "nixos";
+    username = "t-elos";
 
-      nixpkgsWithOverlays = system: (import nixpkgs rec {
-        inherit system;
-
-        config = {
-          allowUnfree = true;
-          permittedInsecurePackages = [
-            # FIXME:: add any insecure packages you absolutely need here
-          ];
-        };
-
-        overlays = [
-          nur.overlays.default
-
-          (_final: prev: {
-            unstable = import nixpkgs-unstable {
-              inherit (prev) system;
-              inherit config;
-            };
-          })
-        ];
-      });
-
-      configurationDefaults = args: {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "hm-backup";
-        home-manager.extraSpecialArgs = args;
-      };
-
-      argDefaults = {
-        inherit secrets inputs self nix-index-database;
-        channels = {
-          inherit nixpkgs nixpkgs-unstable;
-        };
-      };
-
-      mkNixosConfiguration = {
-        system ? "x86_64-linux",
-        hostname,
-        username,
-        args ? {},
-        modules,
-      }: let
-        specialArgs = argDefaults // {inherit hostname username;} // args;
-      in
-        nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
-          pkgs = nixpkgsWithOverlays system;
-          modules =
-            [
-              (configurationDefaults specialArgs)
-              home-manager.nixosModules.home-manager
-              nix-ld.nixosModules.nix-ld
-              { programs.nix-ld.dev.enable = true; }
-              {
-                environment.systemPackages = [
-                  neovim.packages.${system}.nvim
-                ];
-              }
-            ]
-            ++ modules;
-        };
-    in {
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
-
-      nixosConfigurations.nixos = mkNixosConfiguration {
-        hostname = "nixos";
-        username = "t-elos";
-        modules = [
-          nixos-wsl.nixosModules.wsl
-          ./wsl.nix
-        ];
+    specialArgs = {
+      inherit inputs system hostname username;
+      inherit (inputs) self nix-index-database;
+      channels = {
+        inherit (inputs) nixpkgs nixpkgs-unstable;
       };
     };
+  in {
+    formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.alejandra;
+
+    nixosConfigurations.nixos = inputs.nixpkgs.lib.nixosSystem {
+      inherit system specialArgs;
+      modules = [
+        ./system
+        ./runtime
+        # {
+        #   environment.systemPackages = [
+        #     inputs.neovim.packages.${system}.nvim
+        #   ];
+        # }
+      ];
+    };
+  };
 }
