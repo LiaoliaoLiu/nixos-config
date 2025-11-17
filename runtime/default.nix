@@ -3,9 +3,7 @@
   specialArgs,
   inputs,
   ...
-}: let
-  secrets = builtins.fromJSON (builtins.readFile ./secrets.json);
-in {
+}: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
   ];
@@ -22,6 +20,6 @@ in {
   home-manager.extraSpecialArgs =
     specialArgs
     // {
-      inherit secrets;
+      local = builtins.fromJSON (builtins.readFile ./local.json);
     };
 }

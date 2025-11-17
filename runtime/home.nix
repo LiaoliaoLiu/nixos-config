@@ -1,6 +1,4 @@
 {
-  # FIXME: uncomment the next line if you want to reference your GitHub/GitLab access tokens and other secrets
-  # secrets,
   lib,
   pkgs,
   username,

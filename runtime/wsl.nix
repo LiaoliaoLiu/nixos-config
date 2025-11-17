@@ -1,8 +1,8 @@
-{...}: {
+{local, ...}: {
   programs.fish = {
     interactiveShellInit = ''
       # WSL-specific: Add win32yank to PATH
-      fish_add_path --append /mnt/c/Users/liuli/scoop/apps/win32yank/0.1.1
+      fish_add_path --append /mnt/c/Users/${local.windowsUsername}/scoop/apps/win32yank/0.1.1
     '';
 
     shellAliases = {

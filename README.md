@@ -72,4 +72,4 @@ This project uses a modular structure with clear separation between system-level
   - `shell.nix` - Shell-related configurations
   - `git.nix` - Git configuration
   - `wsl.nix` - WSL-specific shell configurations (conditionally imported via `isWsl`)
-  - `secrets.json` - Secret values (you know what to do)
+  - `local.json` - Personal configuration (git email/name, Windows username , tokens) - **gitignored**

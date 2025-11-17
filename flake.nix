@@ -20,9 +20,9 @@
 
   # inputs.neovim.url = "/home/t-elos/repo/neovim";
 
-  outputs = inputs: let
+  outputs = inputs: rec {
     lib = import ./lib.nix {inherit inputs;};
-  in {
+
     formatter = lib.forAllSystems (system: inputs.nixpkgs.legacyPackages.${system}.alejandra);
 
     nixosConfigurations.nixos = lib.mkNixosConfig {
