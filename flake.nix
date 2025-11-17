@@ -21,30 +21,23 @@
   # inputs.neovim.url = "/home/t-elos/repo/neovim";
 
   outputs = inputs: let
-    system = "x86_64-linux";
-    hostname = "nixos";
-    username = "t-elos";
-
-    specialArgs = {
-      inherit inputs system hostname username;
-      inherit (inputs) self nix-index-database;
-      channels = {
-        inherit (inputs) nixpkgs nixpkgs-unstable;
-      };
-    };
+    lib = import ./lib.nix {inherit inputs;};
   in {
-    formatter.x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.alejandra;
+    formatter = lib.forAllSystems (system: inputs.nixpkgs.legacyPackages.${system}.alejandra);
 
-    nixosConfigurations.nixos = inputs.nixpkgs.lib.nixosSystem {
-      inherit system specialArgs;
+    nixosConfigurations.nixos = lib.mkNixosConfig {
+      system = "x86_64-linux";
+      hostname = "nixos";
+      username = "t-elos";
+      isWsl = true;
       modules = [
         ./system
         ./runtime
-        # {
+        # ({pkgs, ...}: {
         #   environment.systemPackages = [
-        #     inputs.neovim.packages.${system}.nvim
+        #     inputs.neovim.packages.${pkgs.stdenv.hostPlatform.system}.nvim
         #   ];
-        # }
+        # })
       ];
     };
   };

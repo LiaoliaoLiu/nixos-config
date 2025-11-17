@@ -1,17 +1,17 @@
 {
   lib,
-  system,
   username,
   hostname,
   pkgs,
   inputs,
+  isWsl,
   ...
 }: {
   imports =
     [
       inputs.nix-ld.nixosModules.nix-ld
     ]
-    ++ lib.optional (system == "x86_64-linux") ./wsl.nix;
+    ++ lib.optional isWsl ./wsl.nix;
 
   time.timeZone = "America/Vancouver";
   networking.hostName = "${hostname}";

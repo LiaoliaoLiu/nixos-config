@@ -1,13 +1,14 @@
 {
   inputs,
   username,
-  system,
   pkgs,
   ...
 }: {
   imports = [
     inputs.nixos-wsl.nixosModules.wsl
   ];
+
+  nixpkgs.hostPlatform = "x86_64-linux";
 
   wsl = {
     enable = true;
@@ -67,7 +68,7 @@
 
     (_final: prev: {
       unstable = import inputs.nixpkgs-unstable {
-        inherit (prev) system;
+        system = prev.stdenv.hostPlatform.system;
         config = prev.config;
       };
     })

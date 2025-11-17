@@ -2,9 +2,9 @@
   # FIXME: uncomment the next line if you want to reference your GitHub/GitLab access tokens and other secrets
   # secrets,
   lib,
-  system,
   pkgs,
   username,
+  isWsl,
   nix-index-database,
   ...
 }: let
@@ -68,7 +68,6 @@
     statix # nix
   ];
 in {
-
   programs.home-manager.enable = true;
 
   imports =
@@ -77,7 +76,7 @@ in {
       ./shell.nix
       ./git.nix
     ]
-    ++ lib.optional (system == "x86_64-linux") ./wsl.nix;
+    ++ lib.optional isWsl ./wsl.nix;
 
   home.stateVersion = "22.11";
 

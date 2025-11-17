@@ -50,22 +50,26 @@ This project uses a modular structure with clear separation between system-level
   - `nixpkgs` - Remove `master` if you want to use a 'stable' version.
   - `nixos-wsl` - WSL-specific configuration options
   - `nix-index-database` tells you how to install a package when you run a command which requires a binary not in the `$PATH`
-  - `neovim` - My neovim is still shitty, ideally you want to put the below in [./runtime/default.nix](./runtime/default.nix) for yours:
+  - `neovim` - My neovim is still shitty, ideally you want to put the below in [./system/default.nix](./system/default.nix) for yours:
 
 ```nix
   environment.systemPackages = [
-    inputs.neovim.packages.${system}.nvim
+    inputs.neovim.packages.${pkgs.stdenv.hostPlatform.system}.nvim
   ];
 ```
 
+- `lib.nix` - Flake utility functions
+  - `forAllSystems` - Helper for multi-platform support
+  - `mkNixosConfig` - Configuration builder
+
 - `system/` - System-level configuration
   - `default.nix` - (hostname, timezone, users...)
-  - `wsl.nix` - WSL-specific NixOS system configuration (conditionally imported on `x86_64-linux`)
+  - `wsl.nix` - WSL-specific NixOS system configuration (conditionally imported via `isWsl`)
 
 - `runtime/` - User-level configuration and packages
   - `default.nix` - NixOS-level home-manager options
   - `home.nix` - User packages, home directory settings, and module imports
   - `shell.nix` - Shell-related configurations
   - `git.nix` - Git configuration
-  - `wsl.nix` - WSL-specific shell configurations (conditionally imported on `x86_64-linux`)
+  - `wsl.nix` - WSL-specific shell configurations (conditionally imported via `isWsl`)
   - `secrets.json` - Secret values (you know what to do)

@@ -1,12 +1,12 @@
 {
   lib,
-  system,
+  isWsl,
   pkgs,
   ...
 }: {
   imports =
     []
-    ++ lib.optional (system == "x86_64-linux") ./wsl.nix;
+    ++ lib.optional isWsl ./wsl.nix;
 
   programs = {
     starship.enable = true;

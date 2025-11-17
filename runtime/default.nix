@@ -1,7 +1,6 @@
 {
   username,
   specialArgs,
-  system,
   inputs,
   ...
 }: let
