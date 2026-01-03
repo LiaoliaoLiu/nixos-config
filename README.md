@@ -1,6 +1,6 @@
 # nixos-config
 
-Based on https://github.com/LGUG2Z/nixos-wsl-starter. Althought it works, but I cannot tolerate the way the original author organized his configurations.
+Based on https://github.com/LGUG2Z/nixos-wsl-starter. Althought it works, I cannot tolerate the way the original author organized his configurations.
 
 ## WSL
 Follow the instructions of [NixOS-WSL](https://github.com/nix-community/NixOS-WSL) to install NixOS.
